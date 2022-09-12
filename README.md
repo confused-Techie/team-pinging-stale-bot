@@ -1,10 +1,8 @@
-# Probot: Stale
+# Probot: Team-Pinging-Stale-Bot
 
-> A GitHub App built with [Probot](https://github.com/probot/probot) that closes abandoned Issues and Pull Requests after a period of inactivity.
+An in progress bot for `pulsar-edit` that automatically pings the team that has access to a repo, when an pull request has not seen any recent activity. 
 
-[![](https://cloud.githubusercontent.com/assets/173/23858697/4885f0d6-07cf-11e7-96ed-716948027bbc.png)](https://github.com/probot/demo/issues/2)
-
-Inspired by @parkr's [auto-reply](https://github.com/parkr/auto-reply#optional-mark-and-sweep-stale-issues) bot that runs @jekyllbot.
+> The rest of the readme has not been changed since forking, except the yaml configuration. 
 
 ## Usage
 
@@ -14,56 +12,38 @@ Inspired by @parkr's [auto-reply](https://github.com/parkr/auto-reply#optional-m
 
 A `.github/stale.yml` file is required to enable the plugin. The file can be empty, or it can override any of these default settings:
 
+> This configuration is also available [here](/team-ping-stale-bot.yml)
+
 ```yml
-# Configuration for probot-stale - https://github.com/probot/stale
+# Configuration for team-pinging-stale-bot 
 
-# Number of days of inactivity before an Issue or Pull Request becomes stale
-daysUntilStale: 60
+# Number of days of inactivity before a Pull Request becomes stale 
+daysUntilStale: 10
 
-# Number of days of inactivity before an Issue or Pull Request with the stale label is closed.
-# Set to false to disable. If disabled, issues still need to be closed manually, but will remain marked as stale.
-daysUntilClose: 7
-
-# Only issues or pull requests with all of these labels are check if stale. Defaults to `[]` (disabled)
+# Only pull requests with all of these labels are checked if stale. Defaults to `[]` (disabled)
 onlyLabels: []
 
-# Issues or Pull Requests with these labels will never be considered stale. Set to `[]` to disable
+# Pull Requests with these labels will never be considered stale. Set to `[]` to disable.
 exemptLabels:
   - pinned
-  - security
-  - "[Status] Maybe Later"
 
-# Set to true to ignore issues in a project (defaults to false)
-exemptProjects: false
+# Set to true to ignore prs in a project (defaults to false)
+exemptProjects: false 
 
-# Set to true to ignore issues in a milestone (defaults to false)
-exemptMilestones: false
+# Set to ture to ignore prs in a milestone (defaults to false)
+exemptMilestones: false 
 
-# Set to true to ignore issues with an assignee (defaults to false)
-exemptAssignees: false
+# Set to true to ignore prs with an assignee (defaults to false)
+exemptAssignees: false 
 
-# Label to use when marking as stale
-staleLabel: wontfix
-
-# Comment to post when marking as stale. Set to `false` to disable
+# Comment to post when commenting on stale issue. Use `%TEAM%` where the team ping should be.
 markComment: >
-  This issue has been automatically marked as stale because it has not had
-  recent activity. It will be closed if no further activity occurs. Thank you
-  for your contributions.
-
-# Comment to post when removing the stale label.
-# unmarkComment: >
-#   Your comment here.
-
-# Comment to post when closing a stale Issue or Pull Request.
-# closeComment: >
-#   Your comment here.
-
-# Limit the number of actions per hour, from 1-30. Default is 30
+  This issue has been automatically found to be stale because it has not had 
+  recent activity. Pinging %TEAM% as the relevant team that should review this.
+  Thank you for your contributions.
+  
+# Limit the number of actions per hour, from 1-30. Default is 30.
 limitPerRun: 30
-
-# Limit to only `issues` or `pulls`
-# only: issues
 
 # Optionally, specify configuration settings that are specific to just 'issues' or 'pulls':
 # pulls:
