@@ -17,20 +17,13 @@ const validConfigs = [
   [{ exemptMilestones: false }],
   [{ exemptAssignees: true }],
   [{ exemptAssignees: false }],
-  [{ staleLabel: 'stale' }],
   [{ markComment: 'stale yo' }],
   [{ markComment: false }],
-  [{ unmarkComment: 'not stale' }],
-  [{ unmarkComment: false }],
-  [{ closeComment: 'closing yo' }],
-  [{ closeComment: false }],
   [{ limitPerRun: 1 }],
   [{ limitPerRun: 30 }],
   [{ only: null }],
-  [{ only: 'issues' }],
   [{ only: 'pulls' }],
   [{ pulls: { daysUntilStale: 2 } }],
-  [{ issues: { staleLabel: 'stale-issue' } }],
   [{ _extends: '.github' }],
   [{ _extends: 'foobar' }]
 ]
@@ -40,19 +33,13 @@ const invalidConfigs = [
   [{ exemptProjects: 'nope' }, 'must be a boolean'],
   [{ exemptMilestones: 'nope' }, 'must be a boolean'],
   [{ exemptAssignees: 'nope' }, 'must be a boolean'],
-  [{ staleLabel: '' }, 'not allowed to be empty'],
-  [{ staleLabel: false }, 'must be a string'],
-  [{ staleLabel: ['a', 'b'] }, 'must be a string'],
   [{ markComment: true }, 'must be a string or false'],
-  [{ unmarkComment: true }, 'must be a string or false'],
-  [{ closeComment: true }, 'must be a string or false'],
   [{ limitPerRun: 31 }, 'must be an integer between 1 and 30'],
   [{ limitPerRun: 0 }, 'must be an integer between 1 and 30'],
   [{ limitPerRun: 0.5 }, 'must be an integer between 1 and 30'],
-  [{ only: 'donuts' }, 'must be one of [issues, pulls, null]'],
+  [{ only: 'donuts' }, 'must be one of [pulls, null]'],
   [{ pulls: { daysUntilStale: 'no' } }, 'must be a number'],
   [{ pulls: { lol: 'nope' } }, '"lol" is not allowed'],
-  [{ issues: { staleLabel: '' } }, 'not allowed to be empty'],
   [{ _extends: true }, 'must be a string'],
   [{ _extends: false }, 'must be a string']
 ]
@@ -61,21 +48,17 @@ describe('schema', () => {
   test('defaults', async () => {
     expect(schema.validate({}).value).toEqual({
       daysUntilStale: 60,
-      daysUntilClose: 7,
       onlyLabels: [],
       exemptLabels: ['pinned', 'security'],
       exemptProjects: false,
       exemptMilestones: false,
       exemptAssignees: false,
-      staleLabel: 'wontfix',
       perform: true,
       markComment: 'Is this still relevant? If so, what is blocking it? ' +
         'Is there anything you can do to help move it forward?' +
         '\n\nThis issue has been automatically marked as stale ' +
         'because it has not had recent activity. ' +
         'It will be closed if no further activity occurs.',
-      unmarkComment: false,
-      closeComment: false,
       limitPerRun: 30
     })
   })

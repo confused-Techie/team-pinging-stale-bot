@@ -12,6 +12,7 @@ module.exports = async app => {
 
   async function markAndSweep (context) {
     const stale = await forRepository(context)
+    await stale.teamSetup();
     await stale.markAndSweep('pulls')
   }
 

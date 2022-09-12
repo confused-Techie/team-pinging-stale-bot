@@ -9,7 +9,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['Probot Stale'],
+  app_name: ['Probot Team Pinging Stale Bot'],
   /**
    * Your New Relic license key.
    */

@@ -100,7 +100,7 @@ describe('stale', () => {
       })
     }
 
-    for (const type of ['pulls', 'issues']) {
+    for (const type of ['pulls']) {
       let comments = 0
       let closed = 0
       let labeledStale = 0
@@ -162,34 +162,6 @@ describe('stale', () => {
 
       await stale.markAndSweep('issues')
       expect(stale.getClosable).not.toHaveBeenCalled()
-
-      await stale.markAndSweep('pulls')
-      expect(stale.getClosable).not.toHaveBeenCalled()
-    }
-  )
-
-  test(
-    'should not close issues if only keyword is configured with the pulls value',
-    async () => {
-      let stale = new Stale(github, { perform: true, owner: 'probot', repo: 'stale', logger: app.log })
-      stale.config.only = 'pulls'
-      stale.config.daysUntilClose = 1
-      stale.getStale = jest.fn().mockImplementation(() => Promise.resolve({ data: { items: [] } }))
-      stale.getClosable = jest.fn()
-
-      await stale.markAndSweep('issues')
-      expect(stale.getClosable).not.toHaveBeenCalled()
-    }
-  )
-
-  test(
-    'should not close pull requests if only keyword is configured with the issues value',
-    async () => {
-      let stale = new Stale(github, { perform: true, owner: 'probot', repo: 'stale', logger: app.log })
-      stale.config.only = 'issues'
-      stale.config.daysUntilClose = 1
-      stale.getStale = jest.fn().mockImplementation(() => Promise.resolve({ data: { items: [] } }))
-      stale.getClosable = jest.fn()
 
       await stale.markAndSweep('pulls')
       expect(stale.getClosable).not.toHaveBeenCalled()
@@ -303,26 +275,5 @@ describe('stale', () => {
       }
     )
 
-    test(
-      'should close issue if it is open',
-      async () => {
-        const staleLabel = 'stale'
-        let stale = new Stale(github, { perform: true, owner: 'probot', repo: 'stale', logger: app.log })
-        stale.config.daysUntilClose = 1
-        stale.getClosable = jest.fn().mockImplementation(() => {
-          return Promise.resolve({
-            data: {
-              items: [
-                { number: 1, labels: [{ name: staleLabel }], state: 'open' }
-              ]
-            }
-          })
-        })
-        stale.close = jest.fn()
-
-        await stale.sweep('issues')
-        expect(stale.close).toHaveBeenCalled()
-      }
-    )
   })
 })
